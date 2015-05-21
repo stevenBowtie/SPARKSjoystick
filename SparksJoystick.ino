@@ -7,7 +7,7 @@ float x, y, throttle;
 byte left_motor=64, right_motor=64;
 
 void setup() {
-  Serial.begin(9600);
+  Serial.begin(38400);
 
 }
 
@@ -15,16 +15,13 @@ void loop() {
   x=(analogRead(0)-547.0)/362.5;
   y=(analogRead(1)-511.0)/347.5;
   throttle=(analogRead(2)-90.0)/795;
-  left_motor=(64+(y * throttle * 64)-(x * throttle *64 ));
-  right_motor=(64+(y * throttle * 64)+(x * throttle * 64));
-  Serial.print("X:");
-  Serial.print(x);
-  Serial.print(" Y:");
-  Serial.print(y);
-  Serial.print(" T:");
-  Serial.println(throttle);
-  Serial.print(left_motor);
-  Serial.print(", ");
-  Serial.println(right_motor);
+  left_motor=(64+(y * throttle * 64)+(x * throttle * 25 ));
+  right_motor=(64+(y * throttle * 64)-(x * throttle * 25));
+  left_motor=max(1, min(127, left_motor));
+  right_motor=max(1, min(127, right_motor));
+  Serial.write(left_motor);
+  Serial.write(-right_motor);
+  Serial.flush();
   delay(100);
 }
+
